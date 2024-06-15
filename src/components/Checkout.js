@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../css/Checkout.css';
 
 const Checkout = () => {
@@ -11,19 +13,21 @@ const Checkout = () => {
 
   const handleCheckout = (e) => {
     e.preventDefault();
-
+  
     const order = {
       name,
       email,
       items: cart.items
     };
-
+  
     axios.post('https://tahir-shaikh-uniworld-omniport-backend.onrender.com/api/checkout', order)
       .then(response => {
-        console.log(response.data);
+        toast.success('Order placed successfully!');
         dispatch({ type: 'CLEAR_CART' });
+        console.log(response.data);
       })
       .catch(error => {
+        toast.error('There was an error placing the order!');
         console.error('There was an error placing the order!', error);
       });
   };
@@ -73,6 +77,7 @@ const Checkout = () => {
         />
         <button type="submit">Place Order</button>
       </form>
+      <ToastContainer />
     </div>
   );
 };
